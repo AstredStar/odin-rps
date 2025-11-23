@@ -1,43 +1,4 @@
 // Not allowed to use arrays, loops or anything fancy
-
-function getHumanChoice(){
-    let inp = prompt("Rock, Paper, or Scisors?")
-    inp = inp.toLowerCase()
-    switch(inp){
-        case "rock":
-        case "r":
-        case "1":
-            inp = 0;
-            break;
-        case "paper":
-        case "p":
-        case "2":
-            inp = 1;
-            break;
-        case "scissors":
-        case "scissor":
-        case "scisors":
-        case "scisor":
-        case "sissors":
-        case "sissor":
-        case "sisors":
-        case "sisor":
-        case "cissors":
-        case "cissor":
-        case "cisors":
-        case "cisor":
-        case "s":
-        case "3":
-            inp = 2;
-            break;
-
-        default:
-            inp = 3;
-            break;
-    }
-    return inp
-}
-
 let humanScore = 0;
 let computerScore = 0;
 
@@ -63,8 +24,15 @@ function numToRPS(num){
     return out;
 }
 
-function playRound(){
-    let humanChoice = getHumanChoice();
+function resetScore(){
+    humanScore = 0;
+    computerScore = 0;
+}
+
+
+const textOutput = document.querySelector("#textOutput");
+
+function playRound(humanChoice){ //0=rock, 1=paper, 2=scissors
     let compChoice = getCompChoice();
 
     let humanRPS = numToRPS(humanChoice);
@@ -77,35 +45,46 @@ function playRound(){
     switch (winner){
         case 0:
             humanScore++;
-            message = `You won!\n
-            You threw ${humanRPS} and the computer threw ${compRPS}
+            message = `You won!<br><br>
+            You threw ${humanRPS} and the computer threw ${compRPS}<br>
             Score: ${humanScore} (you), ${computerScore} (computer)`;
             break;
         case 1:
             computerScore++;
-            message = `You lost..\n
-            You threw ${humanRPS} and the computer threw ${compRPS}
+            message = `You lost..<br><br>
+            You threw ${humanRPS} and the computer threw ${compRPS}<br>
             Score: ${humanScore} (you), ${computerScore} (computer)`;
             break;
         default:
-            message = `You drew.\n
-            You threw ${humanRPS} and the computer threw ${compRPS}
+            message = `You drew.<br><br>
+            You threw ${humanRPS} and the computer threw ${compRPS}<br>
             Score: ${humanScore} (you), ${computerScore} (computer)`;
     }
-    alert(message);
+    textOutput.innerHTML=message;
+
+    if (humanScore==5||computerScore==5){
+        if (humanScore>computerScore){
+            textOutput.innerHTML+=`<br><br>You beat the computer<br>Play again?`;
+        }
+        else{
+            textOutput.innerHTML+=`<br><br>You lost to the the computer<br>Play again?`;
+        }
+        resetScore()
+    }
 }
 
-function playGame(){
-    playRound();
-    playRound();
-    playRound();
-    playRound();
-    playRound();
-    let endmsg = "To play again, please refresh."
+const btnContainer = document.querySelector("#btnContainer")
+btnContainer.onclick=(event)=>{
 
-    if (humanScore>computerScore){alert(`You beat the computer ${humanScore}:${computerScore}\n${endmsg}`);}
-    else if (humanScore<computerScore){alert(`You lost to the the computer ${humanScore}:${computerScore}\n${endmsg}`);}
-    else {alert(`You drew the computer ${humanScore}:${computerScore}\n${endmsg}`);}
-}
+    switch (event.target.id){
+        case 'playRock': playRound(0); break;
+        case 'playPaper': playRound(1); break;
+        case 'playScissors': playRound(2); break;
+    }
+};
 
-playGame()
+/*
+if (humanScore>computerScore){alert(`You beat the computer ${humanScore}:${computerScore}\n${endmsg}`);}
+else if (humanScore<computerScore){alert(`You lost to the the computer ${humanScore}:${computerScore}\n${endmsg}`);}
+else {alert(`You drew the computer ${humanScore}:${computerScore}\n${endmsg}`);}
+*/
